@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PrintForge
 
-## Getting Started
+PrintForge is a browsing platform for 3D-printable models — a Next.js app where users can search, filter by category, sort, and paginate through a catalog of user-submitted 3D print files.
 
-First, run the development server:
+Built as a Scrimba practice project using the Next.js App Router with server components, dynamic routes, and a local SQLite database.
+
+## Features
+
+- **Model catalog** — browse all models in a responsive grid, each with an image, name, description, like count, and category
+- **Search** — filter models by name or description
+- **Sort** — order results alphabetically, by popularity (likes), or by most recently added
+- **Categories** — browse models filtered by a specific category
+- **Pagination** — server-driven pagination with configurable page size
+- **Model detail page** — dedicated page for each model showing its full description, category, likes, and date added
+
+## Tech stack
+
+- [Next.js 15](https://nextjs.org) (App Router, React Server Components)
+- [React 19](https://react.dev)
+- [Tailwind CSS 4](https://tailwindcss.com)
+- [SQLite](https://www.sqlite.org/) via `sqlite` / `sqlite3`
+- TypeScript
+
+## Getting started
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This seeds the SQLite database (`printforge.db`) from the JSON fixtures in [lib/data/](lib/data/) before starting the Next.js dev server, then opens the app at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Other scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build   # production build
+npm run start   # run the production build
+npm run lint    # lint the codebase
+```
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+  page.tsx                          # landing page
+  about/                            # about page
+  3d-models/
+    page.tsx                        # models list (search, sort, pagination)
+    [id]/page.tsx                   # single model detail page
+    categories/[categorySlug]/      # models filtered by category
+components/                         # UI components (grid, cards, nav, pagination, search, sort)
+lib/
+  db.ts                             # SQLite connection helper
+  models.ts                         # model queries (list, count, get by id)
+  categories.ts                     # category queries
+  seeds/                            # scripts that seed the SQLite DB from data/*.json
+  data/                             # seed data (models.json, categories.json)
+  types.ts                          # shared TypeScript types
+  utils.ts                          # query param parsing helpers
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Data model
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Each **model** has: `id`, `name`, `description`, `likes`, `image`, `category`, `dateAdded`.
 
-## Deploy on Vercel
+Each **category** has: `name`, `slug`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The SQLite database (`printforge.db`) is regenerated from [lib/data/models.json](lib/data/models.json) and [lib/data/categories.json](lib/data/categories.json) each time `npm run dev` runs, via the seed scripts in [lib/seeds/](lib/seeds/).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+
+This is a learning project built while following a Scrimba course, so some areas (e.g. pagination controls in [components/PaginationControls.tsx](components/PaginationControls.tsx)) are deliberately left as exercises — see [final_pagination_challenge.md](final_pagination_challenge.md) for the current open challenge.
