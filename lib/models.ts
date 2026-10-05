@@ -2,7 +2,7 @@ import { getDBConnection } from '@/lib/db'
 
 export async function getModels({search, sort, categorySlug, page, modelsPerPage}:{
   search?:string,
-  sort?:string,
+  sort?:string | null,
   categorySlug?:string,
   page:number,
   modelsPerPage:number

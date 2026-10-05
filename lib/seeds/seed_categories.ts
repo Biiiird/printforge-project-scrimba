@@ -1,5 +1,5 @@
 import { getDBConnection } from "@/lib/db"
-import categories from "@/lib/data/categories"
+import categories from "@/lib/data/categories.json"
 
 async function seedCategories() {
   const db = await getDBConnection()
